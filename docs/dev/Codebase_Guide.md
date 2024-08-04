@@ -90,7 +90,7 @@ Often, as part of handling a keypress, we'll want to run some code asynchronousl
 
 The UserConfig struct is loaded from lazygit's global config file (and possibly repo-specific config files). It can be re-loaded while lazygit is running, e.g. when the user edits one of the config files. In this case we should make sure that any new or changed config values take effect immediately. The easiest way to achieve this is what we do in most controllers or helpers: these have a pointer to the `common.Common` struct, which contains the UserConfig, and access it from there. Since the UserConfig instance in `common.Common` is updated whenever we reload the config, the code can be sure that it always uses an up-to-date value, and there's nothing else to do.
 
-If that's not possible for some reason, see if you can add code to `Gui.onUserConfigLoaded` to update things from the new config; there are some examples in that function to use as a guide.
+If that's not possible for some reason, see if you can add code to `Gui.onUserConfigLoaded` to update things from the new config; there are some examples in that function to use as a guide. If that's too hard to do too, add the config to the list in `Gui.checkForChangedConfigsThatDontAutoReload` so that the user is asked to quit and restart lazygit.
 
 ## Legacy code structure
 
