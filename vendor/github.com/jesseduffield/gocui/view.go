@@ -845,9 +845,10 @@ func (v *View) parseInput(ch rune, x int, _ int) (bool, []cell) {
 			repeatCount = tabStop - (x % tabStop)
 		}
 		c := cell{
-			fgColor: v.ei.curFgColor,
-			bgColor: v.ei.curBgColor,
-			chr:     ch,
+			fgColor:   v.ei.curFgColor,
+			bgColor:   v.ei.curBgColor,
+			hyperlink: v.ei.hyperlink,
+			chr:       ch,
 		}
 		for i := 0; i < repeatCount; i++ {
 			cells = append(cells, c)
