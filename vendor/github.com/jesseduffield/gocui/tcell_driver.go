@@ -12,13 +12,6 @@ import (
 // We probably don't want this being a global variable for YOLO for now
 var Screen tcell.Screen
 
-// oldStyle is a representation of how a cell would be styled when we were using termbox
-type oldStyle struct {
-	fg         Attribute
-	bg         Attribute
-	outputMode OutputMode
-}
-
 var runeReplacements = map[rune]string{
 	'┌': "+",
 	'┐': "+",
@@ -99,22 +92,22 @@ func (g *Gui) tcellInitSimulation(width int, height int) error {
 // tcellSetCell sets the character cell at a given location to the given
 // content (rune) and attributes using provided OutputMode
 func tcellSetCell(x, y int, ch rune, fg, bg Attribute, outputMode OutputMode) {
-	st := getTcellStyle(oldStyle{fg: fg, bg: bg, outputMode: outputMode})
+	st := getTcellStyle(fg, bg, outputMode)
 	Screen.SetContent(x, y, ch, nil, st)
 }
 
 // getTcellStyle creates tcell.Style from Attributes
-func getTcellStyle(input oldStyle) tcell.Style {
+func getTcellStyle(fg, bg Attribute, outputMode OutputMode) tcell.Style {
 	st := tcell.StyleDefault
 
 	// extract colors and attributes
-	if input.fg != ColorDefault {
-		st = st.Foreground(getTcellColor(input.fg, input.outputMode))
-		st = setTcellFontEffectStyle(st, input.fg)
+	if fg != ColorDefault {
+		st = st.Foreground(getTcellColor(fg, outputMode))
+		st = setTcellFontEffectStyle(st, fg)
 	}
-	if input.bg != ColorDefault {
-		st = st.Background(getTcellColor(input.bg, input.outputMode))
-		st = setTcellFontEffectStyle(st, input.bg)
+	if bg != ColorDefault {
+		st = st.Background(getTcellColor(bg, outputMode))
+		st = setTcellFontEffectStyle(st, bg)
 	}
 
 	return st
