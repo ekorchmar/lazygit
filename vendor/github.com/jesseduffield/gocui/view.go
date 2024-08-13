@@ -378,6 +378,7 @@ type viewLine struct {
 type cell struct {
 	chr              rune
 	bgColor, fgColor Attribute
+	hyperlink        string
 }
 
 type lineType []cell
@@ -470,7 +471,7 @@ func (v *View) Name() string {
 // setRune sets a rune at the given point relative to the view. It applies the
 // specified colors, taking into account if the cell must be highlighted. Also,
 // it checks if the position is valid.
-func (v *View) setRune(x, y int, ch rune, fgColor, bgColor Attribute) error {
+func (v *View) setRune(x, y int, ch rune, fgColor, bgColor Attribute, hyperlink string) error {
 	maxX, maxY := v.Size()
 	if x < 0 || x >= maxX || y < 0 || y >= maxY {
 		return ErrInvalidPoint
@@ -536,7 +537,7 @@ func (v *View) setRune(x, y int, ch rune, fgColor, bgColor Attribute) error {
 		ch = ' '
 	}
 
-	tcellSetCell(v.x0+x+1, v.y0+y+1, ch, fgColor, bgColor, "", v.outMode)
+	tcellSetCell(v.x0+x+1, v.y0+y+1, ch, fgColor, bgColor, hyperlink, v.outMode)
 
 	return nil
 }
@@ -1182,7 +1183,7 @@ func (v *View) draw() error {
 				bgColor = v.BgColor
 			}
 
-			if err := v.setRune(x, y, c.chr, fgColor, bgColor); err != nil {
+			if err := v.setRune(x, y, c.chr, fgColor, bgColor, c.hyperlink); err != nil {
 				return err
 			}
 
