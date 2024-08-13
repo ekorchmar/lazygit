@@ -91,13 +91,13 @@ func (g *Gui) tcellInitSimulation(width int, height int) error {
 
 // tcellSetCell sets the character cell at a given location to the given
 // content (rune) and attributes using provided OutputMode
-func tcellSetCell(x, y int, ch rune, fg, bg Attribute, outputMode OutputMode) {
-	st := getTcellStyle(fg, bg, outputMode)
+func tcellSetCell(x, y int, ch rune, fg, bg Attribute, hyperlink string, outputMode OutputMode) {
+	st := getTcellStyle(fg, bg, hyperlink, outputMode)
 	Screen.SetContent(x, y, ch, nil, st)
 }
 
 // getTcellStyle creates tcell.Style from Attributes
-func getTcellStyle(fg, bg Attribute, outputMode OutputMode) tcell.Style {
+func getTcellStyle(fg, bg Attribute, hyperlink string, outputMode OutputMode) tcell.Style {
 	st := tcell.StyleDefault
 
 	// extract colors and attributes
@@ -108,6 +108,9 @@ func getTcellStyle(fg, bg Attribute, outputMode OutputMode) tcell.Style {
 	if bg != ColorDefault {
 		st = st.Background(getTcellColor(bg, outputMode))
 		st = setTcellFontEffectStyle(st, bg)
+	}
+	if hyperlink != "" {
+		st = st.Url(hyperlink)
 	}
 
 	return st

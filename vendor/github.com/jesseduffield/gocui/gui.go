@@ -282,7 +282,7 @@ func (g *Gui) SetRune(x, y int, ch rune, fgColor, bgColor Attribute) error {
 		// swallowing error because it's not that big of a deal
 		return nil
 	}
-	tcellSetCell(x, y, ch, fgColor, bgColor, g.outputMode)
+	tcellSetCell(x, y, ch, fgColor, bgColor, "", g.outputMode)
 	return nil
 }
 
